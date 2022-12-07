@@ -1,0 +1,11 @@
+{
+  "name": "advent-of-code-2022",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "node": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.11"
+  }
+}
