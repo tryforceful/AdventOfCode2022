@@ -1,0 +1,60 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "\nimport * as fs from \"fs\";\nimport * as _ from 'lodash';\n\nlet data: string\nlet input: string[];\n\ndata = fs.readFileSync(\"./inputs/day07.txt\", \"utf8\");\ninput = data.split(\"\\n\").slice(0, -1);\n\n// console.log(input.slice(0,20));\n\ntype Recurs = Record<string, number | ExtendRecurs>;\ninterface ExtendRecurs extends Recurs {}\n\nconst structure: Recurs = {}\n\nlet current_directory_path: string[] = []\n\nfor(let i = 0; i < input.length; i++) {\n  const curr_line = input[i];\n\n  // console.log(curr_line);\n\n  if(curr_line.charAt(0) == '$') {\n\n    // this was a command\n    const command = curr_line.slice(2,4)\n\n    if(command === 'cd') {\n      const newlocation = curr_line.slice(5)\n      // console.log(`__${newlocation}__`);\n\n      if (newlocation === \"/\") {\n        //to root\n        current_directory_path = [];\n      } else if(newlocation === '..') {\n        //backup\n        if(current_directory_path.length<=0) {console.error( 'nav error!');}\n        current_directory_path.pop();\n      }\n      else {\n        //moving in deeper\n        current_directory_path.push(newlocation);\n      }\n    } else if (command == 'ls') {\n      // next lines are files\n      while(true) {\n        const listitem = input[i + 1];\n        if (!listitem || listitem?.charAt(0) == \"$\") break;\n\n        const [filesize, filename] = listitem.split(\" \");\n\n        if (filesize === \"dir\") {\n          i++;\n          continue;\n        }\n\n        const downpath = [...current_directory_path, filename];\n\n        _.set(structure, downpath, Number(filesize));\n\n        ++i;\n      }\n    }\n    else console.error( 'Bad command!')\n  }\n}\n\n// console.dir(JSON.stringify(structure));\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "41609574",
+                                "[",
+                                "  [ '[\"pcqjnl\",\"lrrl\",\"nwjggvr\",\"bwmglvmt\"]', 1623571 ],",
+                                "  [ '[\"wdtm\",\"ztp\"]', 1785843 ],",
+                                "  [ '[\"pcqjnl\",\"qgpr\",\"jzmpcc\"]', 1800548 ],",
+                                "  [ '[\"sqhw\",\"dqnhzbh\"]', 1967621 ],",
+                                "  [ '[\"sqhw\",\"mjfdjrgt\"]', 1987744 ],",
+                                "  [ '[\"wdtm\",\"vpm\",\"dhmphrn\",\"lrrl\",\"gqqsg\",\"hzfmdhw\"]', 2185741 ],",
+                                "  [ '[\"pcqjnl\",\"lrrl\",\"mrnhn\"]', 2193696 ],",
+                                "  [ '[\"pcqjnl\",\"lrrl\",\"dcfmtw\"]', 2360401 ],",
+                                "  [ '[\"pcqjnl\",\"qgpr\"]', 2400077 ],",
+                                "  [ '[\"wdtm\",\"cpcqz\",\"lrrl\"]', 3148182 ],",
+                                "  [ '[\"pcqjnl\",\"lrrl\",\"nwjggvr\"]', 3524192 ],",
+                                "  [ '[\"wdtm\",\"vpm\",\"dhmphrn\",\"lrrl\",\"gqqsg\"]', 4830726 ],",
+                                "  [ '[\"sqhw\"]', 4848577 ],",
+                                "  [ '[\"wdtm\",\"cpcqz\"]', 5434276 ],",
+                                "  [ '[\"wdtm\",\"vpm\",\"dhmphrn\",\"lrrl\"]', 7155823 ],",
+                                "  [ '[\"pcqjnl\",\"lrrl\"]', 10047844 ],",
+                                "  [ '[\"wdtm\",\"vpm\",\"dhmphrn\"]', 10125625 ],",
+                                "  [ '[\"wdtm\",\"vpm\"]', 11766511 ],",
+                                "  [ '[\"pcqjnl\"]', 13683830 ],",
+                                "  [ '[\"wdtm\"]', 21756443 ],",
+                                "  [ '[]', 41609574 ]",
+                                "]",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "\n// const setOfPart1Paths = new Set<string[]>();\nlet part1Bytes = 0;\nconst dictOfDirSizes = {};\n\nfunction recursiveCalcSize(patharray: string[] = []) {\n  const thislevel = patharray.length ? _.get(structure, patharray) : structure;\n\n  if(!thislevel) console.error(\"uhoh!\");\n\n  const entries = Object.entries(thislevel);\n\n  const totalBytes = entries.reduce(\n    (acc, [key, value]) =>\n      acc + (typeof value === 'number' ? value : recursiveCalcSize([...patharray, key])),\n    0\n  );\n\n  if (totalBytes <= 100000) {\n    // setOfPart1Paths.add(patharray);\n    part1Bytes += totalBytes;\n  }\n\n  dictOfDirSizes[JSON.stringify(patharray)] = totalBytes;\n\n  return totalBytes ?? 0;\n}\n\nconst totalFSBytes = recursiveCalcSize();\n\nconsole.log(totalFSBytes);\nconsole.log(part1Bytes);\n\n\n/// PART TWO\n\n// Total FS bytes = 41,609,574\n// Need 30,000,000 free on 70,000,000 file system\n// Need to delete: ******1,609,574******\n\nconst MUST_DELETE = 1609574\n\nconst f = (Object.entries(dictOfDirSizes) as [string, number][])\n  .sort((a, b) => (a[1] < b[1] ? -1 : a[1] == b[1] ? 0 : 1))\n  .filter((x) => x[1] >= MUST_DELETE);\n\nconsole.dir(f);\n"
+            ],
+            "outputs": []
+        }
+    ]
+}
