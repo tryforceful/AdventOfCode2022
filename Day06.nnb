@@ -1,0 +1,29 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "\nimport fs from \"fs\";\n\nlet data;\nlet input: string;\n\ndata = fs.readFileSync(\"./inputs/day06.txt\", \"utf8\");\ninput = data.split(\"\\n\").slice(0, -1)[0];\n\ninput;\n\nlet i = 0;\nconst PACKET_SIZE = 4\nwhile(true) {\n  const set = new Set(Array.from(input.slice(i, i+PACKET_SIZE)))\n  //console.log(set);\n  if(set.size >= PACKET_SIZE) break;\n  ++i;\n}\n\ni + PACKET_SIZE; // this is answer #1\n\nlet j = 0;\nconst MESSAGE_SIZE = 14\nwhile (true) {\n  const set = new Set(Array.from(input.slice(j, j + MESSAGE_SIZE)));\n  //console.log(set);\n  if (set.size >= MESSAGE_SIZE) break;\n  ++j;\n}\n\nj + MESSAGE_SIZE; // this is answer #2"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "\u001b[33m3120\u001b[39m"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "const _stacks = [\n  \"NDMQBPZ\",\n  \"CLZQMDHV\",\n  \"QHRDVFZG\",\n  \"HGDFN\",\n  \"NFQ\",\n  \"DQVZFBT\",\n  \"QMTZDVSH\",\n  \"MGFPNQ\",\n  \"BWRM\",\n];\nlet stacks = _stacks.map((stack) => [...Array.from(stack)]);\n\nimport fs from \"fs\";\n\nlet data;\nlet input: string[] = [];\n\ntry {\n  data = fs.readFileSync(\"./inputs/day05.txt\", \"utf8\");\n  input = data.split(\"\\n\").slice(10, -1);\n} catch (err) {\n  console.error(err);\n}\n\ninput;\nconst moves = input\n  .map((row) => row.split(\" \"))\n  .map((arr) => ({\n    ikutsu: Number(arr[1]),\n    from: Number(arr[3]),\n    to: Number(arr[5]),\n  }));\n\nmoves;\n\nconst stacks1 = stacks.map(stack => [...stack])\n\nmoves.forEach(({ ikutsu, from, to }) => {\n  for (let i = 0; i < ikutsu; i++) {\n    const popped = stacks1[from - 1].pop();\n    popped && stacks1[to - 1].push(popped);\n  }\n});\n\nstacks1;\nstacks1.map((stack) => stack[stack.length - 1]).join(\"\");\n\n\n\nconst stacks2 = stacks.map((stack) => [...stack]);\n\nmoves.forEach(({ ikutsu, from, to }) => {\n  const fromstack = stacks2[from - 1];\n  const tostack = stacks2[to - 1];\n\n  const popped = fromstack.splice(fromstack.length - ikutsu);\n  popped.length && tostack.splice(tostack.length, 0, ...popped);\n});\n\nstacks2;\nstacks2.map((stack) => stack[stack.length - 1]).join(\"\");"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "\u001b[32m'MGDMPSZTM'\u001b[39m"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
