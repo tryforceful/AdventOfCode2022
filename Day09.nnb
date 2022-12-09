@@ -1,0 +1,31 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// Import data\n\nimport * as fs from \"fs\";\n\nlet data: string = fs.readFileSync(\"./inputs/day09.txt\", \"utf8\");\nlet input: string[] = data.split(\"\\n\").slice(0, -1);\n\n// Get moves\n\nconst inputmoves = input\n  .map((str) => str.split(\" \"))\n  .map(([a, b]) => [a, Number(b)]) as [\"L\" | \"R\" | \"U\" | \"D\", number][];\n\n// General solution\n\nfunction visitedTailSpots(num_of_knots: number) {\n  const knots = new Array(num_of_knots)\n    .fill(0)\n    .map(() => new Array(2).fill(0)) as [number, number][];\n\n  const move_type = {\n    L: [-1, 0],\n    R: [1, 0],\n    U: [0, 1],\n    D: [0, -1],\n  };\n\n  const set_of_tail_positions = new Set<string>([\"0,0\"]); // in form \"12,-13\" as a string\n\n  function nextKnot(idx: number) {\n    const head = knots[idx];\n    const tail = knots[idx + 1];\n\n    // move tail\n    const diff_x = Math.abs(head[0] - tail[0]);\n    const diff_y = Math.abs(head[1] - tail[1]);\n    const spacediffs = diff_x + diff_y;\n\n    //  case 0: tail is under head, this is fine, don't move it\n\n    //  case 1: tail is next to head in a cardinal direction, also fine\n\n    if (spacediffs === 2) {\n      // If head is diagonal 1,1 away, leave tail as is\n      // If it's 2 away in one direction, move tail appropriately\n      if (diff_y == 0) {\n        // move the tail closer to the head in X direction\n        tail[0] += (head[0] - tail[0]) / 2;\n      } else if (diff_x == 0) {\n        // move the tail closer to the head in Y direction\n        tail[1] += (head[1] - tail[1]) / 2;\n      }\n    } else if (spacediffs === 3) {\n      // if it's 3 away in 1 direction, it's impossible\n      if (diff_x == 0 || diff_y == 0) {\n        throw \"THIS SHOULDN'T HAPPEN\";\n      } else {\n        // it's in a Knight in Chess position [2,1] away\n        // find out which is the bigger diff\n        if (diff_x > diff_y) {\n          // 2,1\n          tail[1] = head[1];\n          tail[0] += (head[0] - tail[0]) / 2;\n        } else {\n          // 1,2\n          tail[0] = head[0];\n          tail[1] += (head[1] - tail[1]) / 2;\n        }\n      }\n    } else if (spacediffs === 4) {\n      // this should only be for diagonal moves of prev knot. assume so.\n      tail[0] += (head[0] - tail[0]) / 2;\n      tail[1] += (head[1] - tail[1]) / 2;\n    }\n    // Impossible\n    else if (spacediffs > 4) {\n      throw \"THIS ALSO SHOULDN'T HAPPEN: \" + spacediffs;\n    }\n  }\n\n  for (let [dir, numspaces] of inputmoves) {\n    const [x_change, y_change] = move_type[dir];\n\n    for (let i = 0; i < numspaces; i++) {\n      // move head\n      knots[0][0] += x_change;\n      knots[0][1] += y_change;\n\n      // move each subsequent knot in turn\n      for (let j = 0; j < num_of_knots - 1; j++) nextKnot(j);\n\n      set_of_tail_positions.add(knots[num_of_knots - 1].join(\",\"));\n    }\n  }\n\n  return set_of_tail_positions.size;\n}\n\nconsole.log(visitedTailSpots(2)); // Part 1\nconsole.log(visitedTailSpots(10)); // Part 2\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "6406",
+                                "2643",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
