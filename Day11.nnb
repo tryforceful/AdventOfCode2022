@@ -1,0 +1,31 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "// import * as fs from \"fs\";\n\n// const exported = require(\"./inputs/day11\");\n\nimport { _monkeys } from \"./inputs/day11\";\n\nconst monkeys: TMonkey[] = _monkeys;\n\ntype TMonkey = {\n  start_items: bigint[];\n  Operation: (old: bigint) => bigint;\n  Test: (testval: bigint) => number;\n  num_items_thrown: number;\n};\n\nfunction oneRound() {\n  // one round\n  for (const monkey of monkeys) {\n    monkey.start_items.forEach((item) => {\n      const inspection = monkey.Operation(item);\n      const calmdown = inspection % BigInt(9699690); //(inspection / 3) | 0;\n      const resulting_monkey = monkey.Test(calmdown);\n\n      monkeys[resulting_monkey].start_items.push(calmdown);\n      monkey.num_items_thrown++;\n    });\n    monkey.start_items = [];\n  }\n}\n\nfor (let i = 0; i < 10000; i++) {\n  if (i % 10 == 0) console.log(`round ${i}`);\n  oneRound();\n}\n\nconst throwns = monkeys\n  .map((monkey) => monkey.num_items_thrown)\n  .sort((a, b) => (a < b ? 1 : a > b ? -1 : 0));\n\nconsole.dir(throwns);\n\nconsole.log(throwns[0] * throwns[1]);\n\n// part 2\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "TypeError",
+                                "message": "monkeys is not iterable",
+                                "stack": "    at oneRound (<Cell 2> [17, 13])\n    at <Cell 2> [30, 36]\n    at <Cell 2> [21, 46]\n    at Script.runInContext (node:vm:139:12)\n    at Script.runInNewContext (node:vm:144:17)\n    at Object.runInNewContext (node:vm:298:38)\n    at C (/Users/rob.keleher/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/Users/rob.keleher/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/Users/rob.keleher/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)\n    at k.emit (node:events:527:28)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

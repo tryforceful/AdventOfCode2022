@@ -1,0 +1,60 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Get Input\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import * as fs from \"fs\";\n\nlet data: string;\nlet input: string[];\n\ndata = fs.readFileSync(\"./inputs/day10.txt\", \"utf8\");\ninput = data.split(\"\\n\").slice(0, -1);\n\nconst program = input\n  .map((str) => str.split(\" \"))\n  .map(([a, b]) => (a == \"noop\" ? [1, 0] : [2, +b])) as [number, number][];\n\n//program\n\nconst foo = program.reduce(reductor, [[0, 0]]);\n\nfunction reductor(acc, [op, val]) {\n  acc[acc.length - 1][0] += op;\n  if (op !== 1) {\n    acc[acc.length - 1][1] += val;\n    acc.push([0, 0]);\n  }\n  return acc;\n}\nfoo;\nlet sum_so_far = [0, 1];\n\nfunction accumulator(acc, [a, b]) {\n  sum_so_far[0] += a;\n  sum_so_far[1] += b;\n\n  acc.push(sum_so_far.slice());\n  return acc;\n}\n\nconst bar: [number, number][] = foo.reduce(accumulator, []);\n\nconsole.dir(bar);\n\n// let cycle_num = 1;\n// let register = 1;\n// let signal_strength_sum = 0;\n\n// for (const command of foo) {\n//   const [num_cycles, addend] = command;\n\n//   // if ([20, 60, 100, 140, 180, 220].includes(cycle_num)) {\n//   //   signal_strength_sum += cycle_num * register;\n//   // }\n//   for (const point of [20, 60, 100, 140, 180, 220])\n//     if (cycle_num <= point && cycle_num + num_cycles > point)\n//       signal_strength_sum += point * register;\n\n//   cycle_num += num_cycles;\n//   register += addend;\n// }\n\n// signal_strength_sum;\n\n// part 2\n\nconst CRT: string[] = new Array(240).fill(\".\");\n\nlet register = 1;\n\nlet first = bar.shift();\nlet next_change_cycle = first?.[0] ?? 0,\n  new_reg_value = first?.[1] ?? 0;\n\nfor (let cycle_num = 0; cycle_num < 240; cycle_num++) {\n  if (cycle_num == next_change_cycle) {\n    register = new_reg_value;\n\n    const next_command = bar.shift();\n    if (next_command) {\n      next_change_cycle = next_command[0];\n      new_reg_value = next_command[1];\n    }\n  }\n\n  const position = cycle_num % 40;\n\n  if (\n    position === register ||\n    position === register - 1 ||\n    position === register + 1\n  )\n    CRT[cycle_num] = \"#\";\n}\n\nconst text: string = CRT.join(\"\");\n\nconsole.log([\n  text.slice(0, 40),\n  text.slice(40, 80),\n  text.slice(80, 120),\n  text.slice(120, 160),\n  text.slice(160, 200),\n  text.slice(200, 240),\n]);\n\n// should be\n// ###..#\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "[",
+                                "  [ 5, 6 ],    [ 8, 7 ],    [ 11, 11 ],  [ 13, 36 ],  [ 15, 16 ],",
+                                "  [ 19, 21 ],  [ 21, 24 ],  [ 24, 26 ],  [ 28, 25 ],  [ 30, 31 ],",
+                                "  [ 32, 32 ],  [ 35, 36 ],  [ 38, -1 ],  [ 43, 2 ],   [ 45, 34 ],",
+                                "  [ 47, 9 ],   [ 49, 11 ],  [ 51, 14 ],  [ 54, 16 ],  [ 56, 19 ],",
+                                "  [ 59, 21 ],  [ 61, 23 ],  [ 63, -1 ],  [ 65, 24 ],  [ 67, 29 ],",
+                                "  [ 69, 31 ],  [ 71, 39 ],  [ 73, 16 ],  [ 75, 34 ],  [ 77, 39 ],",
+                                "  [ 79, 0 ],   [ 81, 11 ],  [ 83, 2 ],   [ 85, 8 ],   [ 87, 6 ],",
+                                "  [ 89, 11 ],  [ 91, 15 ],  [ 93, 11 ],  [ 95, 14 ],  [ 97, 19 ],",
+                                "  [ 99, 21 ],  [ 102, 20 ], [ 104, 26 ], [ 106, 5 ],  [ 108, 27 ],",
+                                "  [ 110, 30 ], [ 112, 31 ], [ 114, 36 ], [ 118, 1 ],  [ 124, 38 ],",
+                                "  [ 126, 5 ],  [ 129, 11 ], [ 131, 13 ], [ 133, 12 ], [ 135, 15 ],",
+                                "  [ 137, 16 ], [ 139, 21 ], [ 141, 23 ], [ 143, 4 ],  [ 145, 25 ],",
+                                "  [ 147, 26 ], [ 149, 31 ], [ 151, 0 ],  [ 153, 36 ], [ 156, 39 ],",
+                                "  [ 158, 37 ], [ 160, -1 ], [ 164, 6 ],  [ 166, 20 ], [ 168, 16 ],",
+                                "  [ 170, 9 ],  [ 172, 14 ], [ 174, 16 ], [ 176, 28 ], [ 178, 13 ],",
+                                "  [ 180, 19 ], [ 182, 21 ], [ 184, 26 ], [ 186, -1 ], [ 188, 24 ],",
+                                "  [ 190, 29 ], [ 193, 36 ], [ 195, 34 ], [ 197, 39 ], [ 199, -1 ],",
+                                "  [ 202, 6 ],  [ 205, 5 ],  [ 207, 7 ],  [ 209, 12 ], [ 211, 11 ],",
+                                "  [ 213, 12 ], [ 215, 14 ], [ 217, 21 ], [ 220, 19 ], [ 223, 22 ],",
+                                "  [ 225, 24 ], [ 227, 31 ], [ 231, 32 ], [ 235, 35 ], [ 237, 36 ],",
+                                "  ... 1 more item",
+                                "]",
+                                "[",
+                                "  '###..####..##..###..#..#.###..####.###..',",
+                                "  '#..#....#.#..#.#..#.#.#..#..#.#....#..#.',",
+                                "  '#..#...#..#....#..#.##...#..#.###..###..',",
+                                "  '###...#...#.##.###..#.#..###..#....#..#.',",
+                                "  '#....#....#..#.#....#.#..#....#....#..#.',",
+                                "  '#....####..###.#....#..#.#....####.###..'",
+                                "]",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

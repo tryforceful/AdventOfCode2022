@@ -1,0 +1,39 @@
+Monkey 0:
+  Starting items: [76, 88, 96, 97, 58, 61, 67],
+  Operation: (old:number) => old * 19
+  Test: (testval:number ) => testval % 3 === 0 ? 2 : 3
+
+Monkey 1:
+  Starting items: [93, 71, 79, 83, 69, 70, 94, 98],
+  Operation: (old:number) => old + 8
+  Test: (testval:number ) => testval % 11 === 0 ? 5 : 6
+
+Monkey 2:
+  Starting items: [50, 74, 67, 92, 61, 76],
+  Operation: (old:number) => old * 13
+  Test: (testval:number ) => testval % 19 === 0 ? 3 : 1
+
+Monkey 3:
+  Starting items: [76, 92],
+  Operation: (old:number) => old + 6
+  Test: (testval:number ) => testval % 5 === 0 ? 1 : 6
+
+Monkey 4:
+  Starting items: [74, 94, 55, 87, 62],
+  Operation: (old:number) => old + 5
+  Test: (testval:number ) => testval % 2 === 0 ? 2 : 0
+
+Monkey 5:
+  Starting items: [59, 62, 53, 62],
+  Operation: (old:number) => old * old
+  Test: (testval:number ) => testval % 7 === 0 ? 4 : 7
+
+Monkey 6:
+  Starting items: [62],
+  Operation: (old:number) => old + 2
+  Test: (testval:number ) => testval % 17 === 0 ? 5 : 7
+
+Monkey 7:
+  Starting items: [85, 54, 53],
+  Operation: (old:number) => old + 3
+  Test: (testval:number ) => testval % 13 === 0 ? 4 : 0
