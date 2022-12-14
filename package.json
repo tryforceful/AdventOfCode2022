@@ -2,7 +2,7 @@
   "name": "advent-of-code-2022",
   "author": "Rob Keleher",
   "scripts": {
-    "watch": "nodemon --exec 'ts-node'"
+    "watch-all": "nodemon */*.ts"
   },
   "dependencies": {
     "fs": "^0.0.1-security",
