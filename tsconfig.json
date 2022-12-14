@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "lib": [
-      "es7",
+      "es7"
     ],
     "types": [
       "node"
@@ -27,4 +27,10 @@
   "include": [
     "**/*"
   ],
+  "ts-node": {
+    "extends": "ts-node/node16/tsconfig.json",
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }
