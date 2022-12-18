@@ -1,0 +1,130 @@
+
+there are 10091 instructions to cycle thru
+5 pieces to cycle thru
+ = 50455 max unique conditions before repeating
+
+1795
+4576
+7357
+
+
+every 2781 rows, the pattern repeats
+
+need to find modulus
+
+
+so the ROW pattern is
+row = H + (2781 * n)
+
+
+now find out how many rocks fall to generate that height
+
+
+1,000,000,000,000 -- one trillion rocks.
+
+
+Ran part 2 script on cave_repetition.txt
+
+"look at row 6057"
+total rows 6425
+
+6425 - 6057 = 368 (beware of off by 1)
+
+
+looking at the counts file:
+
+[piece_num, height_of_tower]
+229,360
+230,362
+231,363
+232,365
+233,367*
+234,367*
+235,369*
+236,370
+237,373
+238,376
+
+now looking 2781 ahead:
+1983,3144
+1984,3144
+1985,3144
+1986,3145
+1987,3148*
+1988,3151*
+1989,3155*
+1990,3155
+1991,3156
+1992,3158
+1993,3160
+1994,3164
+
+
+
+after block 253 falls, a pattern emerges
+
+Block 253, Row 396
+- looking 2781 rows ahead
+
+Block 2003, Row 3177
+- looking 2781 rows ahead
+
+Block 3753,Row 5958
+- looking 2781 rows ahead
+
+******
+BLOCKS CYCLE IN 1750
+ROWS CYCLE IN 2781
+******
+
+Block #: Row offset after 1750 more blocks (from offsets.txt)
+242: 2777
+243: 2781
+244: 2779
+245: 2779
+246: 2780
+247: 2779
+248: 2781
+249: 2781
+250: 2780
+251: 2780
+252: 2781
+253: 2781
+254: 2781
+255: 2781
+256: 2781
+257: 2781
+258: 2781
+259: 2781
+260: 2781
+
+Pattern starts to settle after 252 blocks. Hard to know if that's really the solution though.
+
+From counts.txt, here is [block,tower_height]:
+246,386
+247,388
+248,389
+249,391
+250,391
+251,392
+252,394
+253,396
+254,398
+255,400
+256,401
+
+
+
+
+... Ok I don't think I needed to do any of this
+
+
+1 trillion % 1750 = 750
+1 trillion // 1750 = 571428571
+
+
+the # of rows at blocks=750 is ***1232***
+
+So now do this math
+
+1232 + 571428571 * 2781
