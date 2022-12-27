@@ -1,0 +1,57 @@
+The weighting of each node in the graph should be based on how much
+pressure can be released cumulatively from (n=now -> 30 mins end time)
+if we were to go and open its valve from where we currently stand.
+So the weights change over time based on our location! Hmm
+
+Should we always agnostically think only of the "next step forward",
+or is there a better algorithm that keeps in mind very proximate clusters of
+high-reward nodes?
+
+EXAMPLE:
+
+A - B - C - D - E - F - G - H
+|           |
+|-----------|
+I
+|
+J
+
+Represented in valve flow rates:
+
+0 - 13 - 2 - 20 - 3 - 0 - 0 - 22
+|             |
+|-------------|
+0
+|
+21
+
+Determine shortest distance to each node,
+determine time remaining if we visited that node and opened the valve
+Multiply that remaining time by the flow of the valve
+= total weight of node
+
+Time is n = 0
+Farthest distance is q = 5 in this scenario
+Means max 6 seconds before new flow is added
+
+0 - 13*28s - 2*27s - 20*28s - 12*27s - 0 - 0 - 22*24s
+|                     |
+|---------------------|
+0
+|
+21*27s
+
+Weights:
+
+0 - 364 - 54 - 560 - 324 - 0 - 0 - 528
+|               |
+|---------------|
+0
+|
+567
+
+Uh oh. This didn't predict the right results :(
+
+///
+
+Using Floyd-Warshall matrix
