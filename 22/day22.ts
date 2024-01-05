@@ -35,16 +35,16 @@ const facing_moves = {
 type BRACKET = keyof typeof facing_moves
 const brackets = Object.keys(facing_moves) as BRACKET[];
 
+const FACE_SIZE = 50;
 const cube_face_coords = {
-  A: [0, 50],
-  B: [0, 100],
-  C: [50, 50],
-  D: [100, 50],
-  E: [100, 0],
-  F: [150, 0],
+  A: [0, 1 * FACE_SIZE],
+  B: [0, 2 * FACE_SIZE],
+  C: [1 * FACE_SIZE, 1 * FACE_SIZE],
+  D: [2 * FACE_SIZE, 1 * FACE_SIZE],
+  E: [2 * FACE_SIZE, 0],
+  F: [3 * FACE_SIZE, 0],
 } as const;
 type FACE = keyof typeof cube_face_coords;
-const FACE_SIZE = 50;
 
 const wraparounds: {
   [x: string]: readonly [FACE, BRACKET];
